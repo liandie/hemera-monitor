@@ -1,0 +1,37 @@
+{
+  "name": "hemera-monitor",
+  "version": "1.0.1",
+  "description": "hemera服务监控",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/my-hemera/hemera-monitor.git"
+  },
+  "keywords": [
+    "hemera",
+    "hemera-monitor",
+    "monitor",
+    "jaeger",
+    "hemera-jaeger"
+  ],
+  "author": "xufangyi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/my-hemera/hemera-monitor/issues"
+  },
+  "homepage": "https://github.com/my-hemera/hemera-monitor#readme",
+  "dependencies": {
+    "jaeger-client": "^3.17.1",
+    "opentracing": "^0.14.4"
+  },
+  "devDependencies": {
+    "hemera-plugin": "^2.0.2",
+    "hemera-testsuite": "^4.1.0",
+    "nats": "^1.3.2",
+    "nats-hemera": "^7.0.2",
+    "tap": "^14.9.2"
+  }
+}

@@ -13,7 +13,10 @@ hemera.use(require('../index'), {
     serviceName: 'math',
     sampler: {
       type: 'const',
-      param: 1
+      param: 1,
+      hostPort: '127.0.0.1:5778',
+      host: '127.0.0.1',
+      port: 5778,
     },
     reporter: {
       logSpans: true
@@ -33,6 +36,7 @@ hemera.use(require('../index'), {
 })
 
 hemera.ready(() => {
+
   hemera.add(
     {
       topic: 'math',
@@ -43,17 +47,57 @@ hemera.ready(() => {
     }
   )
 
-  setInterval(()=>{
+  hemera.add(
+    {
+      topic: 'add',
+      cmd: 'add'
+    },
+    function (req, cb) {
+      cb(null, req.a + req.b)
+    }
+  )
+
+  hemera.add(
+    {
+      topic: 'sub',
+      cmd: 'sub'
+    },
+    function (req, cb) {
+      cb(null, req.sum - 10000)
+    }
+  )
+
+  setInterval(() => {
+    hemera.act(
+      {
+        topic: 'add',
+        cmd: 'add',
+        a: 10000,
+        b: 9999999
+      },
+      function (err, resp) {
+        hemera.act({
+          topic: 'sub',
+          cmd: 'sub',
+          sum: resp
+        }, function (err, resp){
+          console.log(resp)
+        })
+      }
+    )
+  }, 1000)
+
+  setInterval(() => {
     hemera.act(
       {
         topic: 'math',
         cmd: 'add',
-        a: 1,
-        b: 1
+        a: 10000,
+        b: 9999999
       },
-      function(err, resp) {
-        console.log(resp)
+      function (err, resp) {
+          console.log(resp)
       }
     )
-  }, 1000)
+  }, 2000)
 })

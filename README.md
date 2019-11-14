@@ -94,3 +94,53 @@ hemera服务监控
   ```
 
 **利用 `elasticsearch` 作为存储引擎部署 `jaeger`**
+
+```sh
+ docker run -d --name es --restart=always -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" -e ES_JAVA_OPTS="-Xms512m -Xmx512m" docker.elastic.co/elasticsearch/elasticsearch:7.2.1
+```
+2.3 配置跨域
+2.3.1 进入容器
+由于要进行配置，因此需要进入容器当中修改相应的配置信息。
+
+docker exec -it es /bin/bash
+2.3.2 进行配置
+# 显示文件
+ls
+结果如下：
+LICENSE.txt  README.textile  config  lib   modules
+NOTICE.txt   bin             data    logs  plugins
+
+# 进入配置文件夹
+cd config
+
+# 显示文件
+ls
+结果如下：
+elasticsearch.keystore  ingest-geoip  log4j2.properties  roles.yml  users_roles
+elasticsearch.yml       jvm.options   role_mapping.yml   users
+
+# 修改配置文件
+vi elasticsearch.yml
+
+# 加入跨域配置
+http.cors.enabled: true
+http.cors.allow-origin: "*"
+path.data: /path/to/data1,/path/to/data2 
+
+# Path to log files:
+path.logs: /path/to/logs
+
+# Path to where plugins are installed:
+path.plugins: /path/to/plugins
+2.3 重启容器
+由于修改了配置，因此需要重启ElasticSearch容器。
+
+docker restart es
+
+三、Docker 部署 ElasticSearch-Head
+为什么要安装ElasticSearch-Head呢，原因是需要有一个管理界面进行查看ElasticSearch相关信息
+
+3.1 拉取镜像
+docker pull mobz/elasticsearch-head:5
+3.2 运行容器
+docker run -d --name es_admin -p 9100:9100 mobz/elasticsearch-head:5
